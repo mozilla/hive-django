@@ -76,8 +76,41 @@ class CityScopedAdmin(admin.ModelAdmin):
         obj.save()
 
 class OrganizationAdmin(CityScopedAdmin):
+    # http://djangotricks.blogspot.com/2013/12/how-to-export-data-as-excel.html
+    def export_csv(modeladmin, request, queryset):
+        import csv
+        from django.http import HttpResponse
+        from django.conf import settings
+        from django.utils.encoding import smart_str
+        from django.core.urlresolvers import reverse
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=organizations.csv'
+        writer = csv.writer(response, csv.excel)
+        # BOM (optional...Excel needs it to open UTF-8 file properly)
+        response.write(u'\ufeff'.encode('utf8'))
+        writer.writerow([
+            smart_str(u"Name"),
+            smart_str(u"Website"),
+            smart_str(u"Address"),
+            smart_str(u"Twitter name"),
+            smart_str(u"Mission"),
+        ])
+        for obj in queryset:
+            writer.writerow([
+                smart_str(obj.name),
+                smart_str(obj.website),
+                smart_str(obj.address),
+                smart_str(obj.twitter_name),
+                smart_str(obj.mission)
+            ])
+        return response
+
+    export_csv.short_description = u"Export CSV"
+
     form = OrganizationForm
     inlines = (ContentChannelInline,)
+    actions = [export_csv]
     list_display = ('name', 'city')
     list_filter = ('city',)
     prepopulated_fields = {"slug": ("name",)}
