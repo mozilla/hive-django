@@ -48,11 +48,6 @@ variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`,
   value is the name of another (all-caps) environment variable, e.g.
   `HEROKU_POSTGRESQL_AMBER_URL`, that variable's value will be used
   as the database URL.
-* `EMAIL_BACKEND_URL` is a URL representing the email backend to use.
-  Examples include `console:`, `smtp://hostname:port`, and
-  `smtp+tls://user:pass@hostname:port`. Mandrill can also be used
-  via 'mandrill://your-mandrill-api-key', though this requires the
-  [djrill][] package.
 * `DEFAULT_FROM_EMAIL` is the default email address to use for various
   automated correspondence from the site manager(s), such as password
   resets. Defaults to `webmaster@localhost`.
@@ -77,6 +72,11 @@ variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`,
   undefined, Discourse SSO functionality will be disabled.
 * `DISCOURSE_SSO_ORIGIN` is the origin of your Discourse site. If
   `DISCOURSE_SSO_SECRET` is set, this must also be set.
+* `EMAIL_HOST` Hostname of the SMTP server for sending emails
+* `EMAIL_PORT` Port number for the email host
+* `EMAIL_HOST_USER` The username of the account to connect to the email host as
+* `EMAIL_HOST_PASSWORD` The email accounts password
+* `EMAIL_USE_TLS` set to True to connect with TLS
 
 ## Flatpages
 
