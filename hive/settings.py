@@ -15,7 +15,6 @@ import urlparse
 import dj_database_url
 
 from .settings_utils import set_default_env, set_default_db, \
-                            parse_email_backend_url, \
                             parse_secure_proxy_ssl_header, \
                             is_running_test_suite
 
@@ -61,7 +60,11 @@ if DEBUG: set_default_env(ORIGIN='http://localhost:%d' % PORT)
 
 set_default_db('sqlite:///%s' % path('db.sqlite3'))
 
-globals().update(parse_email_backend_url(os.environ['EMAIL_BACKEND_URL']))
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = 'EMAIL_USE_TLS' in os.environ
 
 ORIGIN = os.environ['ORIGIN']
 
@@ -83,8 +86,8 @@ INSTALLED_APPS = (
     'registration',
     'directory',
     'mentoring',
-    'cityblogs',
-) + EMAIL_BACKEND_INSTALLED_APPS
+    'cityblogs'
+)
 
 if MINIGROUP_DIGESTIF_USERPASS or is_running_test_suite():
     INSTALLED_APPS += ('minigroup_digestif',)
